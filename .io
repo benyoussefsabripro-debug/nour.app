@@ -8,9 +8,162 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1a2e28">
     <meta name="apple-mobile-web-app-title" content="Nour">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
-    <style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="animated-background">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div id="screen-home" class="screen active fade-in">
+        <div class="logo-area">
+            <div class="logo-circle">✦</div>
+            <h1>"non encore en recherche"</h1>
+            <div class="subtitle">Sagesse & Savoir</div>
+        </div>
+
+        <div id="daily-card-container" class="daily-card fade-in">
+            <div class="daily-label">✨ HADITH DU JOUR</div>
+            <p id="daily-hadith-text">Chargement...</p>
+            <div id="daily-hadith-source" class="daily-source">...</div>
+        </div>
+        
+        <div style="margin-top: 30px; width: 100%; padding: 0 40px;">
+            <button class="btn-enter" onclick="showScreen('screen-dashboard')">BIENVENUE</button>
+        </div>
+
+        <div class="footer-count">
+            <span id="totalCount">...</span> Hadiths répertoriés
+        </div>
+    </div>
+
+    <div id="screen-dashboard" class="screen">
+        <div class="nav-header">
+            <h2>Accueil</h2>
+            <p>Que souhaitez-vous faire ?</p>
+        </div>
+
+        <div class="dashboard-grid fade-in">
+            <div class="dash-card" onclick="goToMenu()">
+                <div class="dash-icon">📖</div>
+                <div class="dash-content">
+                    <h3>Bibliothèque</h3>
+                    <p>Accéder aux recueils et hadiths</p>
+                </div>
+                <div class="dash-arrow">→</div>
+            </div>
+
+            <div class="dash-card" onclick="startQuiz()">
+                <div class="dash-icon">🧠</div>
+                <div class="dash-content">
+                    <h3>Quiz Éducatif</h3>
+                    <p>Tester mes connaissances</p>
+                </div>
+                <div class="dash-arrow">→</div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top: auto; padding-bottom: 30px;">
+            <button class="btn-back" onclick="showScreen('screen-home')">Retour au début</button>
+        </div>
+    </div>
+
+    <div id="screen-menu" class="screen">
+        <div class="nav-header">
+            <button class="btn-back" onclick="showScreen('screen-dashboard')" style="position: absolute; left: 20px;">❮ Accueil</button>
+            <h2>Sources</h2>
+            <p>Sélectionnez un recueil</p>
+        </div>
+        
+        <div class="grid-menu fade-in">
+            <div class="menu-card" onclick="goToList('Bukhari')">
+                <div class="menu-icon">📘</div>
+                <div class="menu-title">Al-Bukhari</div>
+            </div>
+            <div class="menu-card" onclick="goToList('Muslim')">
+                <div class="menu-icon">📗</div>
+                <div class="menu-title">Muslim</div>
+            </div>
+            <div class="menu-card" onclick="goToList('Tirmidhi')">
+                <div class="menu-icon">📙</div>
+                <div class="menu-title">At-Tirmidhi</div>
+            </div>
+             <div class="menu-card" onclick="goToList('Autre')">
+                <div class="menu-icon">📚</div>
+                <div class="menu-title">Autres</div>
+            </div>
+            <div class="menu-card card-all" onclick="goToList('Tous')">
+                <div class="menu-icon">✦</div>
+                <div class="menu-title">Bibliothèque Complète</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-list" class="screen">
+        <div class="top-bar">
+            <button class="btn-back" onclick="goToMenu()">✕ Retour</button>
+            <div class="list-title" id="list-title">Liste</div>
+            <div style="width: 50px;"></div>
+        </div>
+
+        <div class="search-area">
+            <input type="text" id="searchInput" placeholder="Rechercher (ex: patience)...">
+            <select id="topicFilter">
+                <option value="Tous">Tous les sujets</option>
+                <option value="Intention">Intention</option>
+                <option value="Comportement">Comportement</option>
+                <option value="Famille">Famille</option>
+                <option value="Prière">Prière</option>
+                <option value="Charité">Charité</option>
+                <option value="Savoir">Savoir</option>
+                <option value="Repentir">Repentir</option>
+                <option value="Santé">Santé</option>
+                <option value="Voisinage">Voisinage</option>
+                <option value="Mort">Mort</option>
+                <option value="Coran">Coran</option>
+            </select>
+        </div>
+
+        <div id="hadithListContainer" class="hadith-container fade-in"></div>
+    </div>
+
+    <div id="screen-quiz" class="screen">
+        <div class="top-bar">
+            <button class="btn-back" onclick="showScreen('screen-dashboard')">✕ Quitter</button>
+            <div class="list-title">Quiz Islamique</div>
+            <div style="width: 50px;"></div>
+        </div>
+
+        <div class="quiz-container fade-in">
+            <div id="quiz-content">
+                <div class="progress-bar"><div id="progress-fill"></div></div>
+                <h3 id="question-text">Chargement...</h3>
+                <div id="options-container"></div>
+            </div>
+
+            <div id="quiz-result" style="display: none; text-align: center;">
+                <div class="score-circle">
+                   <span id="score-number"></span>
+                </div>
+                <h3 style="color:var(--primary); margin-bottom:10px;">Quiz Terminé !</h3>
+                <p id="score-message" style="color:#666; margin-bottom:30px;">Bravo !</p>
+                <button class="btn-enter btn-quiz" onclick="startQuiz()">REJOUER</button>
+                <br><br>
+                <button class="btn-back" onclick="showScreen('screen-dashboard')">Retour Accueil</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
+
 /* --- DESIGN SYSTEM "NOUR - TOTAL BLACK" --- */
 :root {
     --bg-deep: #050a08;     /* Noir profond */
@@ -164,15 +317,7 @@ input, select {
 
 /* Footer */
 .footer-count { position: absolute; bottom: 20px; width: 100%; text-align: center; color: rgba(255,255,255,0.3); font-size: 0.8rem; }
-        
 
-
-       
-    </style>
-</head>
-<body>
-
-    <script>
 /* =========================================
    PARTIE 1 : LA BASE DE DONNÉES (DATA)
    Colle tes 1000 Hadiths ici
@@ -958,371 +1103,7 @@ setTimeout(function() {
     const counter = document.getElementById('totalCount');
     if (counter) counter.innerText = hadiths.length;
 }, 500);
-/* =========================================
-   MOTEUR DU QUIZ ÉDUCATIF 🧠
-   ========================================= */
 
-// 1. La base de données des questions
-const quizData = [
-    {
-        question: "Selon le Hadith, où se trouve le Paradis ?",
-        options: ["Dans le ciel", "Sous les pieds des mères", "À l'est", "Dans les mosquées"],
-        correct: 1 // L'index de la bonne réponse (0, 1, 2, 3)
-    },
-    {
-        question: "Quelle action est décrite comme une 'aumône' facile ?",
-        options: ["Donner de l'or", "Jeûner un an", "Sourire à son frère", "Construire une maison"],
-        correct: 2
-    },
-    {
-        question: "Quel est le pilier de l'Islam qui efface les péchés comme l'eau éteint le feu ?",
-        options: ["La Zakat (Aumône)", "Le Hajj", "La Prière", "Le Jeûne"],
-        correct: 0
-    },
-    {
-        question: "Complétez : 'Le fort n'est pas celui qui terrasse ses adversaires, mais celui qui...'",
-        options: ["...porte des montagnes", "...se maîtrise lors de la colère", "...prie toute la nuit", "...parle fort"],
-        correct: 1
-    },
-    {
-        question: "Quel verset est le plus grand du Coran selon les Hadiths ?",
-        options: ["Al-Fatiha", "Al-Ikhlas", "Ayat al-Kursi", "Al-Falaq"],
-        correct: 2
-    },
-  // --- PACK QUESTIONS 1 ---
-    {
-        question: "Combien y a-t-il de piliers en Islam ?",
-        options: ["3", "5", "6", "99"],
-        correct: 1
-    },
-    {
-        question: "Quelle est la première sourate révélée au Prophète (sws) ?",
-        options: ["Al-Fatiha", "Al-Baqara", "Al-Alaq (Iqra)", "An-Nas"],
-        correct: 2
-    },
-    {
-        question: "Quel prophète a été avalé par un grand poisson ?",
-        options: ["Moussa (Moïse)", "Younous (Jonas)", "Issa (Jésus)", "Youssef (Joseph)"],
-        correct: 1
-    },
-    {
-        question: "Quelle prière ne comporte ni inclinaison ni prosternation ?",
-        options: ["La prière de l'Aïd", "La prière du Vendredi", "La prière mortuaire (Janaza)", "La prière de l'éclipse"],
-        correct: 2
-    },
-    {
-        question: "Quel compagnon a été le premier Calife de l'Islam ?",
-        options: ["Omar ibn al-Khattab", "Ali ibn Abi Talib", "Abou Bakr as-Siddiq", "Othman ibn Affan"],
-        correct: 2
-    },
-    {
-        question: "Combien de fois par jour un musulman doit-il prier ?",
-        options: ["3 fois", "5 fois", "7 fois", "10 fois"],
-        correct: 1
-    },
-    {
-        question: "Quel est le livre sacré révélé au prophète Daoud (David) ?",
-        options: ["La Thora", "L'Évangile", "Le Zabour (Psaumes)", "Le Coran"],
-        correct: 2
-    },
-    {
-        question: "Dans quelle ville le Prophète (sws) est-il né ?",
-        options: ["Médine", "Jérusalem", "La Mecque", "Taif"],
-        correct: 2
-    },
-    {
-        question: "Quel mois vient juste après le Ramadan ?",
-        options: ["Chaabane", "Chawwal", "Mouharram", "Safar"],
-        correct: 1
-    },
-    {
-        question: "Quelle est la sourate qui équivaut à un tiers du Coran ?",
-        options: ["Al-Fatiha", "Al-Kawthar", "Al-Ikhlas", "Al-Falaq"],
-        correct: 2
-    },
-    {
-        question: "Quel ange est chargé de souffler dans la Trompe le Jour du Jugement ?",
-        options: ["Jibril", "Mikail", "Israfil", "Malik"],
-        correct: 2
-    },
-    {
-        question: "Combien d'années la révélation du Coran a-t-elle duré ?",
-        options: ["10 ans", "23 ans", "40 ans", "63 ans"],
-        correct: 1
-    },
-    {
-        question: "Quel est le nom de la mère du Prophète (sws) ?",
-        options: ["Khadija", "Aicha", "Amina", "Halima"],
-        correct: 2
-    },
-    {
-        question: "Quelle est la nuit meilleure que mille mois ?",
-        options: ["La nuit de l'Ascension", "La nuit du Destin (Laylatul Qadr)", "La nuit du doute", "La première nuit du Ramadan"],
-        correct: 1
-    },
-    {
-        question: "Que doit-on dire avant de commencer à manger ?",
-        options: ["Alhamdulillah", "Bismillah", "Allahu Akbar", "Astaghfirullah"],
-        correct: 1
-    },
-    {
-        question: "Quel prophète a parlé au berceau ?",
-        options: ["Moussa", "Issa (Jésus)", "Yahya", "Ismail"],
-        correct: 1
-    },
-    {
-        question: "Quelle est la 'Mère des Croyants' surnommée 'La Pure' (At-Tahira) ?",
-        options: ["Aicha", "Hafsa", "Khadija", "Zaynab"],
-        correct: 2
-    },
-    {
-        question: "Combien de sourates compte le Coran ?",
-        options: ["110", "112", "114", "120"],
-        correct: 2
-    },
-    {
-        question: "Quelle prière marque le milieu de la journée ?",
-        options: ["Fajr", "Dohr", "Asr", "Maghrib"],
-        correct: 1
-    },
-    {
-        question: "Qui a construit la Kaaba avec son fils ?",
-        options: ["Adam", "Nouh (Noé)", "Ibrahim (Abraham)", "Moussa"],
-        correct: 2
-    },
-    {
-        question: "Quel est le péché qu'Allah ne pardonne pas s'il n'est pas repenti avant la mort ?",
-        options: ["Le vol", "Le meurtre", "Le Shirk (Association)", "Le mensonge"],
-        correct: 2
-    },
-    {
-        question: "Quelle est la plus courte sourate du Coran ?",
-        options: ["Al-Asr", "Al-Kawthar", "An-Nasr", "Al-Ikhlas"],
-        correct: 1
-    },
-    {
-        question: "Quel compagnon est surnommé 'Le Lion d'Allah' ?",
-        options: ["Khalid ibn Walid", "Hamza ibn Abd al-Muttalib", "Omar ibn al-Khattab", "Ali ibn Abi Talib"],
-        correct: 1
-    },
-    {
-        question: "Dans quelle direction les musulmans prient-ils ?",
-        options: ["Vers l'Est", "Vers Jérusalem", "Vers la Kaaba (La Mecque)", "Vers le Ciel"],
-        correct: 2
-    },
-    {
-        question: "Quel est le nom de la monture du Prophète lors du voyage nocturne ?",
-        options: ["Al-Qaswa", "Al-Buraq", "Duldul", "Al-Abwa"],
-        correct: 1
-    },
-    {
-        question: "Qui fut le premier muezzin de l'Islam ?",
-        options: ["Zayd ibn Thabit", "Bilal al-Habachi", "Abdullah ibn Masud", "Salman al-Farisi"],
-        correct: 1
-    },
-    {
-        question: "Quel prophète a fendu la mer en deux par la permission d'Allah ?",
-        options: ["Nouh", "Moussa", "Salih", "Chouaib"],
-        correct: 1
-    },
-    {
-        question: "Combien y a-t-il de mois sacrés en Islam ?",
-        options: ["1", "3", "4", "12"],
-        correct: 2
-    },
-    {
-        question: "Quelle femme a une sourate portant son nom dans le Coran ?",
-        options: ["Khadija", "Asiya", "Maryam", "Hajar"],
-        correct: 2
-    },
-    {
-        question: "Que signifie le mot 'Islam' ?",
-        options: ["Paix", "Guerre", "Soumission (à Allah)", "Liberté"],
-        correct: 2
-    },
-  
-  
-];
-
-// Variables du jeu
-let currentQuestionIndex = 0;
-let score = 0;
-let isAnswering = false; // Pour empêcher de cliquer 2 fois
-
-// Variable pour stocker les 5 questions de la partie en cours
-let currentQuizQuestions = [];
-
-window.startQuiz = function() {
-    currentQuestionIndex = 0;
-    score = 0;
-    
-    // 1. On mélange toutes les questions disponibles (Algorithme de Fisher-Yates)
-    // On crée une copie pour ne pas casser l'ordre original
-    let shuffled = [...quizData].sort(() => 0.5 - Math.random());
-    
-    // 2. On prend seulement les 5 premières du mélange
-    currentQuizQuestions = shuffled.slice(0, 5);
-    
-    // 3. On affiche l'écran
-    showScreen('screen-quiz');
-    document.getElementById('quiz-content').style.display = 'block';
-    document.getElementById('quiz-result').style.display = 'none';
-    
-    function loadQuestion() {
-    isAnswering = false;
-    // ATTENTION : On utilise maintenant 'currentQuizQuestions'
-    const q = currentQuizQuestions[currentQuestionIndex];
-    const total = currentQuizQuestions.length; // Sera toujours 5
-    
-    // Barre de progression
-    const progress = ((currentQuestionIndex) / total) * 100;
-    document.getElementById('progress-fill').style.width = progress + "%";
-    
-    // Affichage
-    document.getElementById('question-text').innerText = q.question;
-    
-    const optionsDiv = document.getElementById('options-container');
-    optionsDiv.innerHTML = "";
-    
-    q.options.forEach((opt, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = opt;
-        btn.onclick = () => checkAnswer(index, btn);
-        optionsDiv.appendChild(btn);
-    });
-}
-
-function checkAnswer(selectedIndex, btnElement) {
-    if (isAnswering) return;
-    isAnswering = true;
-    
-    // On vérifie dans la liste des 5 questions actuelles
-    const correctIndex = currentQuizQuestions[currentQuestionIndex].correct;
-    
-    if (selectedIndex === correctIndex) {
-        btnElement.classList.add('correct');
-        score++;
-    } else {
-        btnElement.classList.add('wrong');
-        const allBtns = document.querySelectorAll('.option-btn');
-        allBtns[correctIndex].classList.add('correct');
-    }
-    
-    setTimeout(() => {
-        currentQuestionIndex++;
-        // On vérifie si on a fini les 5 questions
-        if (currentQuestionIndex < currentQuizQuestions.length) {
-            loadQuestion();
-        } else {
-            showResults();
-        }
-    }, 1500);
-}
-
-// Charger une question
-function loadQuestion() {
-    isAnswering = false;
-    const q = quizData[currentQuestionIndex];
-    const total = quizData.length;
-    
-    // Mise à jour barre de progression
-    const progress = ((currentQuestionIndex) / total) * 100;
-    document.getElementById('progress-fill').style.width = progress + "%";
-    
-    // Affichage texte
-    document.getElementById('question-text').innerText = q.question;
-    
-    // Création des boutons
-    const optionsDiv = document.getElementById('options-container');
-    optionsDiv.innerHTML = ""; // On vide les anciens boutons
-    
-    q.options.forEach((opt, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = opt;
-        btn.onclick = () => checkAnswer(index, btn);
-        optionsDiv.appendChild(btn);
-    });
-}
-
-function loadQuestion() {
-    isAnswering = false;
-    // ATTENTION : On utilise maintenant 'currentQuizQuestions'
-    const q = currentQuizQuestions[currentQuestionIndex];
-    const total = currentQuizQuestions.length; // Sera toujours 5
-    
-    // Barre de progression
-    const progress = ((currentQuestionIndex) / total) * 100;
-    document.getElementById('progress-fill').style.width = progress + "%";
-    
-    // Affichage
-    document.getElementById('question-text').innerText = q.question;
-    
-    const optionsDiv = document.getElementById('options-container');
-    optionsDiv.innerHTML = "";
-    
-    q.options.forEach((opt, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = opt;
-        btn.onclick = () => checkAnswer(index, btn);
-        optionsDiv.appendChild(btn);
-    });
-}
-
-function checkAnswer(selectedIndex, btnElement) {
-    if (isAnswering) return;
-    isAnswering = true;
-    
-    // On vérifie dans la liste des 5 questions actuelles
-    const correctIndex = currentQuizQuestions[currentQuestionIndex].correct;
-    
-    if (selectedIndex === correctIndex) {
-        btnElement.classList.add('correct');
-        score++;
-    } else {
-        btnElement.classList.add('wrong');
-        const allBtns = document.querySelectorAll('.option-btn');
-        allBtns[correctIndex].classList.add('correct');
-    }
-    
-    setTimeout(() => {
-        currentQuestionIndex++;
-        // On vérifie si on a fini les 5 questions
-        if (currentQuestionIndex < currentQuizQuestions.length) {
-            loadQuestion();
-        } else {
-            showResults();
-        }
-    }, 1500);
-}
-    
-    // Attendre 1.5 seconde avant la suite
-    setTimeout(() => {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < quizData.length) {
-            loadQuestion();
-        } else {
-            showResults();
-        }
-    }, 1500);
-}
-
-// Écran de fin
-function showResults() {
-    document.getElementById('quiz-content').style.display = 'none';
-    const resultDiv = document.getElementById('quiz-result');
-    resultDiv.style.display = 'block';
-    
-    // Animation du score
-    document.getElementById('score-number').innerText = score;
-    
-    const msg = document.getElementById('score-message');
-    if (score === 5) msg.innerText = "Incroyable ! Un vrai savant 🏆";
-    else if (score >= 3) msg.innerText = "Bravo ! Belle connaissance 👏";
-    else msg.innerText = "Courage ! Relis les Hadiths et réessaie 💪";
-}
 /* =========================================
    GÉNÉRATEUR HADITH DU JOUR 🌞
    ========================================= */
@@ -1343,7 +1124,122 @@ setTimeout(function() {
         document.getElementById('daily-hadith-source').innerText = "— " + dailyHadith.source;
     }
 }, 500);
-        
-    </script>
-</body>
-</html>
+
+/* =========================================
+   ZONE QUIZ (DONNÉES + MOTEUR) - CODE PROPRE
+   ========================================= */
+
+// 1. LA LISTE DES QUESTIONS (20 questions pour tester)
+const quizData = [
+    { question: "Combien y a-t-il de piliers en Islam ?", options: ["3", "5", "6", "99"], correct: 1 },
+    { question: "Quelle sourate équivaut à un tiers du Coran ?", options: ["Al-Fatiha", "Al-Ikhlas", "Al-Falaq", "An-Nas"], correct: 1 },
+    { question: "Quelle prière marque le milieu de la journée ?", options: ["Fajr", "Dohr", "Asr", "Maghrib"], correct: 1 },
+    { question: "Quel prophète a fendu la mer ?", options: ["Moussa", "Ibrahim", "Nouh", "Issa"], correct: 0 },
+    { question: "Que signifie le mot Islam ?", options: ["Guerre", "Soumission", "Liberté", "Sagesse"], correct: 1 },
+    { question: "Qui fut le premier Calife ?", options: ["Omar", "Ali", "Abou Bakr", "Othman"], correct: 2 },
+    { question: "Quel livre fut révélé à Daoud ?", options: ["Thora", "Évangile", "Zabour", "Coran"], correct: 2 },
+    { question: "Où est né le Prophète (sws) ?", options: ["Médine", "Jérusalem", "La Mecque", "Taif"], correct: 2 },
+    { question: "Quel mois suit le Ramadan ?", options: ["Chaabane", "Chawwal", "Mouharram", "Safar"], correct: 1 },
+    { question: "Quel ange soufflera dans la Trompe ?", options: ["Jibril", "Mikail", "Israfil", "Malik"], correct: 2 },
+    { question: "La nuit meilleure que 1000 mois ?", options: ["Ascension", "Destin", "Doute", "Aïd"], correct: 1 },
+    { question: "Que dire avant de manger ?", options: ["Alhamdulillah", "Bismillah", "Allahu Akbar", "Amine"], correct: 1 },
+    { question: "Quel prophète a parlé au berceau ?", options: ["Moussa", "Issa", "Yahya", "Ismail"], correct: 1 },
+    { question: "La plus courte sourate ?", options: ["Al-Asr", "Al-Kawthar", "An-Nasr", "Al-Ikhlas"], correct: 1 },
+    { question: "Qui est le 'Lion d'Allah' ?", options: ["Khalid ibn Walid", "Hamza", "Omar", "Ali"], correct: 1 },
+    { question: "Vers où prie-t-on ?", options: ["Est", "Jérusalem", "Kaaba", "Ciel"], correct: 2 },
+    { question: "Premier muezzin de l'Islam ?", options: ["Zayd", "Bilal", "Abdullah", "Salman"], correct: 1 },
+    { question: "Combien de sourates dans le Coran ?", options: ["110", "112", "114", "120"], correct: 2 },
+    { question: "La prière du voyageur comporte combien de raka'at ?", options: ["1", "2", "3", "4"], correct: 1 },
+    { question: "Quel prophète a construit l'Arche ?", options: ["Ibrahim", "Nouh", "Moussa", "Adam"], correct: 1 }
+];
+
+// 2. LES VARIABLES DU JEU
+// (Attention à ne pas les avoir déclarées plus haut dans ton fichier !)
+let currentQuestionIndex = 0;
+let score = 0;
+let isAnswering = false;
+let currentQuizQuestions = [];
+
+// 3. LA FONCTION DE DÉMARRAGE
+window.startQuiz = function() {
+    currentQuestionIndex = 0;
+    score = 0;
+    
+    // MÉLANGE ET SÉLECTIONNE 10 QUESTIONS
+    // .slice(0, 10) veut dire : prends les 10 premières après mélange
+    let shuffled = [...quizData].sort(() => 0.5 - Math.random());
+    currentQuizQuestions = shuffled.slice(0, 5);
+    
+    showScreen('screen-quiz');
+    document.getElementById('quiz-content').style.display = 'block';
+    document.getElementById('quiz-result').style.display = 'none';
+    
+    loadQuestion();
+};
+
+// 4. CHARGEMENT D'UNE QUESTION
+function loadQuestion() {
+    isAnswering = false;
+    const q = currentQuizQuestions[currentQuestionIndex];
+    const total = currentQuizQuestions.length;
+    
+    // Barre de progression
+    const progress = ((currentQuestionIndex) / total) * 100;
+    document.getElementById('progress-fill').style.width = progress + "%";
+    
+    // Texte
+    document.getElementById('question-text').innerText = q.question;
+    
+    // Boutons
+    const optionsDiv = document.getElementById('options-container');
+    optionsDiv.innerHTML = "";
+    
+    q.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(index, btn);
+        optionsDiv.appendChild(btn);
+    });
+}
+
+// 5. VÉRIFICATION RÉPONSE
+function checkAnswer(selectedIndex, btnElement) {
+    if (isAnswering) return;
+    isAnswering = true;
+    
+    const correctIndex = currentQuizQuestions[currentQuestionIndex].correct;
+    
+    if (selectedIndex === correctIndex) {
+        btnElement.classList.add('correct');
+        score++;
+    } else {
+        btnElement.classList.add('wrong');
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns[correctIndex].classList.add('correct');
+    }
+    
+    setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < currentQuizQuestions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }, 1500);
+}
+
+// 6. RÉSULTATS
+function showResults() {
+    document.getElementById('quiz-content').style.display = 'none';
+    const resultDiv = document.getElementById('quiz-result');
+    resultDiv.style.display = 'block';
+    
+    // Ajoute les guillemets avec la barre au milieu
+document.getElementById('score-number').innerText = score + " / " + currentQuizQuestions.length;
+    
+    const msg = document.getElementById('score-message');
+    if (score === currentQuizQuestions.length) msg.innerText = "Parfait ! Ma shaa Allah 🏆";
+    else if (score >= (currentQuizQuestions.length / 2)) msg.innerText = "Bravo ! Belle performance 👏";
+    else msg.innerText = "Courage ! Réessaie pour apprendre 💪";
+}
