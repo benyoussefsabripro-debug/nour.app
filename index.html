@@ -4,167 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nour</title>
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1a2e28">
     <meta name="apple-mobile-web-app-title" content="Nour">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-</head>
-<body>
 
-    <div class="animated-background">
-        <span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span>
-    </div>
+    <style>
+        /* ================================================= */
+        /* 1. VA SUR CODEPEN DANS LA CASE [CSS]              */
+        /* COPIE TOUT LE CSS ET COLLE-LE JUSTE EN DESSOUS 👇 */
+        /* ================================================= */
 
-    <div id="screen-home" class="screen active fade-in">
-        <div class="logo-area">
-            <div class="logo-circle">✦</div>
-            <h1>"non encore en recherche"</h1>
-            <div class="subtitle">Sagesse & Savoir</div>
-        </div>
 
-        <div id="daily-card-container" class="daily-card fade-in">
-            <div class="daily-label">✨ HADITH DU JOUR</div>
-            <p id="daily-hadith-text">Chargement...</p>
-            <div id="daily-hadith-source" class="daily-source">...</div>
-        </div>
-        
-        <div style="margin-top: 30px; width: 100%; padding: 0 40px;">
-            <button class="btn-enter" onclick="showScreen('screen-dashboard')">BIENVENUE</button>
-        </div>
 
-        <div class="footer-count">
-            <span id="totalCount">...</span> Hadiths répertoriés
-        </div>
-    </div>
-
-    <div id="screen-dashboard" class="screen">
-        <div class="nav-header">
-            <h2>Accueil</h2>
-            <p>Que souhaitez-vous faire ?</p>
-        </div>
-
-        <div class="dashboard-grid fade-in">
-            <div class="dash-card" onclick="goToMenu()">
-                <div class="dash-icon">📖</div>
-                <div class="dash-content">
-                    <h3>Bibliothèque</h3>
-                    <p>Accéder aux recueils et hadiths</p>
-                </div>
-                <div class="dash-arrow">→</div>
-            </div>
-
-            <div class="dash-card" onclick="startQuiz()">
-                <div class="dash-icon">🧠</div>
-                <div class="dash-content">
-                    <h3>Quiz Éducatif</h3>
-                    <p>Tester mes connaissances</p>
-                </div>
-                <div class="dash-arrow">→</div>
-            </div>
-        </div>
-
-        <div style="text-align:center; margin-top: auto; padding-bottom: 30px;">
-            <button class="btn-back" onclick="showScreen('screen-home')">Retour au début</button>
-        </div>
-    </div>
-
-    <div id="screen-menu" class="screen">
-        <div class="nav-header">
-            <button class="btn-back" onclick="showScreen('screen-dashboard')" style="position: absolute; left: 20px;">❮ Accueil</button>
-            <h2>Sources</h2>
-            <p>Sélectionnez un recueil</p>
-        </div>
-        
-        <div class="grid-menu fade-in">
-            <div class="menu-card" onclick="goToList('Bukhari')">
-                <div class="menu-icon">📘</div>
-                <div class="menu-title">Al-Bukhari</div>
-            </div>
-            <div class="menu-card" onclick="goToList('Muslim')">
-                <div class="menu-icon">📗</div>
-                <div class="menu-title">Muslim</div>
-            </div>
-            <div class="menu-card" onclick="goToList('Tirmidhi')">
-                <div class="menu-icon">📙</div>
-                <div class="menu-title">At-Tirmidhi</div>
-            </div>
-             <div class="menu-card" onclick="goToList('Autre')">
-                <div class="menu-icon">📚</div>
-                <div class="menu-title">Autres</div>
-            </div>
-            <div class="menu-card card-all" onclick="goToList('Tous')">
-                <div class="menu-icon">✦</div>
-                <div class="menu-title">Bibliothèque Complète</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="screen-list" class="screen">
-        <div class="top-bar">
-            <button class="btn-back" onclick="goToMenu()">✕ Retour</button>
-            <div class="list-title" id="list-title">Liste</div>
-            <div style="width: 50px;"></div>
-        </div>
-
-        <div class="search-area">
-            <input type="text" id="searchInput" placeholder="Rechercher (ex: patience)...">
-            <select id="topicFilter">
-                <option value="Tous">Tous les sujets</option>
-                <option value="Intention">Intention</option>
-                <option value="Comportement">Comportement</option>
-                <option value="Famille">Famille</option>
-                <option value="Prière">Prière</option>
-                <option value="Charité">Charité</option>
-                <option value="Savoir">Savoir</option>
-                <option value="Repentir">Repentir</option>
-                <option value="Santé">Santé</option>
-                <option value="Voisinage">Voisinage</option>
-                <option value="Mort">Mort</option>
-                <option value="Coran">Coran</option>
-            </select>
-        </div>
-
-        <div id="hadithListContainer" class="hadith-container fade-in"></div>
-    </div>
-
-    <div id="screen-quiz" class="screen">
-        <div class="top-bar">
-            <button class="btn-back" onclick="showScreen('screen-dashboard')">✕ Quitter</button>
-            <div class="list-title">Quiz Islamique</div>
-            <div style="width: 50px;"></div>
-        </div>
-
-        <div class="quiz-container fade-in">
-            <div id="quiz-content">
-                <div class="progress-bar"><div id="progress-fill"></div></div>
-                <h3 id="question-text">Chargement...</h3>
-                <div id="options-container"></div>
-            </div>
-
-            <div id="quiz-result" style="display: none; text-align: center;">
-                <div class="score-circle">
-                   <span id="score-number"></span>
-                </div>
-                <h3 style="color:var(--primary); margin-bottom:10px;">Quiz Terminé !</h3>
-                <p id="score-message" style="color:#666; margin-bottom:30px;">Bravo !</p>
-                <button class="btn-enter btn-quiz" onclick="startQuiz()">REJOUER</button>
-                <br><br>
-                <button class="btn-back" onclick="showScreen('screen-dashboard')">Retour Accueil</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="main.js"></script>
-</body>
-</html>
-
-/* --- DESIGN SYSTEM "NOUR - TOTAL BLACK" --- */
+        /* --- DESIGN SYSTEM "NOUR - TOTAL BLACK" --- */
 :root {
     --bg-deep: #050a08;     /* Noir profond */
     --primary: #4e8c75;     /* Vert élégant */
@@ -318,7 +174,21 @@ input, select {
 /* Footer */
 .footer-count { position: absolute; bottom: 20px; width: 100%; text-align: center; color: rgba(255,255,255,0.3); font-size: 0.8rem; }
 
-/* =========================================
+
+
+    </style>
+</head>
+<body>
+
+    <script>
+        /* ================================================= */
+        /* 3. VA SUR CODEPEN DANS LA CASE [JS]               */
+        /* COPIE TOUT LE JS ET COLLE-LE JUSTE EN DESSOUS 👇  */
+        /* ================================================= */
+
+
+
+       /* =========================================
    PARTIE 1 : LA BASE DE DONNÉES (DATA)
    Colle tes 1000 Hadiths ici
    ========================================= */
@@ -1243,3 +1113,9 @@ document.getElementById('score-number').innerText = score + " / " + currentQuizQ
     else if (score >= (currentQuizQuestions.length / 2)) msg.innerText = "Bravo ! Belle performance 👏";
     else msg.innerText = "Courage ! Réessaie pour apprendre 💪";
 }
+
+
+
+    </script>
+</body>
+</html>
