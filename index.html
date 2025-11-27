@@ -4,15 +4,349 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nour</title>
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1a2e28">
     <meta name="apple-mobile-web-app-title" content="Nour">
-    
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
+        /* --- DESIGN SYSTEM "NOUR - TOTAL BLACK" --- */
+        :root {
+            --bg-deep: #050a08; --primary: #4e8c75; --accent: #d4af37; 
+            --text-main: #f0f0f0; --text-muted: #aaaaaa;
+            --glass-bg: rgba(20, 30, 25, 0.7); 
+            --glass-border: rgba(212, 175, 55, 0.25);
+            --glass-blur: blur(12px);
+            --font-title: 'Cinzel', serif; --font-body: 'Lato', sans-serif;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: var(--font-body); background-color: var(--bg-deep); color: var(--text-main);
+            margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .animated-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at bottom center, #1b2e28 0%, #000000 100%);
+        }
+        .animated-background span {
+            position: absolute; display: block; width: 20px; height: 20px; background: var(--accent);
+            border-radius: 50%; opacity: 0; animation: animate 25s linear infinite; bottom: -150px;
+            box-shadow: 0 0 20px var(--accent);
+        }
+        .animated-background span:nth-child(1) { left: 25%; width: 30px; height: 30px; animation-duration: 20s; opacity: 0.2; }
+        .animated-background span:nth-child(2) { left: 10%; width: 10px; height: 10px; animation-delay: 2s; animation-duration: 25s; opacity: 0.3; }
+        .animated-background span:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; animation-duration: 18s; opacity: 0.15; }
+        .animated-background span:nth-child(4) { left: 40%; width: 40px; height: 40px; animation-duration: 22s; opacity: 0.1; }
+        @keyframes animate {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.4; }
+            100% { transform: translateY(-120vh) rotate(720deg); opacity: 0; }
+        }
+        .screen {
+            display: none; flex-direction: column; height: 100%; width: 100%;
+            position: absolute; top: 0; left: 0; overflow-y: auto; background: transparent; -webkit-overflow-scrolling: touch;
+        }
+        .active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        #screen-home { justify-content: center; align-items: center; text-align: center; padding: 40px 20px; }
+        .logo-circle {
+            width: 90px; height: 90px; border: 2px solid var(--accent); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;
+            font-size: 2.5rem; color: var(--accent); background: rgba(0,0,0,0.3);
+        }
+        h1 { font-family: var(--font-title); font-size: 3.5rem; margin: 0; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .subtitle { font-size: 1rem; text-transform: uppercase; letter-spacing: 5px; color: var(--accent); margin-top: 10px; opacity: 0.8; }
+        .daily-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 25px; margin: 20px 10px; text-align: center; backdrop-filter: var(--glass-blur);
+        }
+        .daily-label { font-size: 0.75rem; color: var(--accent); font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; }
+        #daily-hadith-text { font-family: var(--font-title); font-size: 1.1rem; line-height: 1.6; color: #fff; font-style: italic; }
+        .daily-source { font-size: 0.85rem; color: var(--text-muted); margin-top: 10px; }
+        .btn-enter {
+            background: linear-gradient(135deg, var(--accent), #b88a2d); color: #000; padding: 16px 0; width: 100%; border: none;
+            border-radius: 50px; font-size: 1rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        .btn-back { background: none; border: none; font-size: 1rem; color: var(--accent); font-weight: bold; cursor: pointer; }
+        .dashboard-grid { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        .dash-card, .menu-card {
+            background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid rgba(255,255,255,0.1);
+            padding: 25px; border-radius: 20px; display: flex; align-items: center; cursor: pointer;
+        }
+        .dash-icon, .menu-icon { font-size: 2rem; margin-right: 20px; color: var(--accent); }
+        .dash-content h3, .menu-title { margin: 0; color: #fff; font-family: var(--font-title); font-size: 1.2rem; }
+        .dash-content p { margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem; }
+        .dash-arrow { color: var(--accent); font-size: 1.5rem; margin-left: auto; }
+        .hadith-container { padding: 20px; }
+        .hadith-card {
+            background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 25px; margin-bottom: 20px; position: relative;
+        }
+        .tag { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 10px; }
+        .hadith-text { font-family: var(--font-title); font-size: 1.15rem; line-height: 1.6; color: #fff; margin-bottom: 20px; }
+        .hadith-source { font-size: 0.85rem; color: var(--text-muted); text-align: right; font-style: italic; }
+        .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 20px; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); }
+        .nav-header { text-align: center; padding: 20px; }
+        .nav-header h2 { font-family: var(--font-title); font-size: 2rem; color: #fff; margin: 0; }
+        .search-area { padding: 10px 20px; }
+        input, select {
+            width: 100%; padding: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; color: #fff; margin-bottom: 10px; font-size: 1rem;
+        }
+        #options-container { display: flex; flex-direction: column; gap: 15px; width: 100%; margin-top: 30px; }
+        .option-btn {
+            width: 100%; padding: 20px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px; color: #fff; font-size: 1.1rem; text-align: left; cursor: pointer; transition: background 0.2s; font-family: var(--font-body);
+        }
+        .correct { background-color: rgba(46, 204, 113, 0.4) !important; border-color: #2ecc71 !important; }
+        .wrong { background-color: rgba(231, 76, 60, 0.4) !important; border-color: #e74c3c !important; }
+        #question-text { font-family: var(--font-title); font-size: 1.4rem; text-align: center; color: #fff; line-height: 1.5; }
+        .score-circle {
+            width: 120px; height: 120px; border-radius: 50%; background: var(--accent); color: #000;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; font-size: 2.5rem; font-weight: bold;
+        }
+        .footer-count { position: absolute; bottom: 20px; width: 100%; text-align: center; color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="animated-background">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div id="screen-home" class="screen active fade-in">
+        <div class="logo-area">
+            <div class="logo-circle">✦</div>
+            <h1>Nour</h1>
+            <div class="subtitle">Sagesse & Savoir</div>
+        </div>
+        <div class="daily-card">
+            <div class="daily-label">✨ HADITH DU JOUR</div>
+            <p id="daily-hadith-text">Chargement...</p>
+            <div id="daily-hadith-source" class="daily-source">...</div>
+        </div>
+        <div style="width: 100%; padding: 0 40px;">
+            <button class="btn-enter" onclick="showScreen('screen-dashboard')">ENTRER DANS L'APP</button>
+        </div>
+        <div class="footer-count"><span id="totalCount">...</span> Hadiths répertoriés</div>
+    </div>
+
+    <div id="screen-dashboard" class="screen">
+        <div class="nav-header"><h2>Accueil</h2><p>Que souhaitez-vous faire ?</p></div>
+        <div class="dashboard-grid fade-in">
+            <div class="dash-card" onclick="goToMenu()">
+                <div class="dash-icon">📖</div>
+                <div class="dash-content"><h3>Bibliothèque</h3><p>Accéder aux recueils</p></div>
+                <div class="dash-arrow">→</div>
+            </div>
+            <div class="dash-card" onclick="startQuiz()">
+                <div class="dash-icon">🧠</div>
+                <div class="dash-content"><h3>Quiz Éducatif</h3><p>Tester mes connaissances</p></div>
+                <div class="dash-arrow">→</div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top: auto; padding-bottom: 30px;">
+            <button class="btn-back" onclick="showScreen('screen-home')">Retour au début</button>
+        </div>
+    </div>
+
+    <div id="screen-menu" class="screen">
+        <div class="nav-header">
+            <button class="btn-back" onclick="showScreen('screen-dashboard')" style="position: absolute; left: 20px;">❮ Accueil</button>
+            <h2>Sources</h2>
+        </div>
+        <div class="dashboard-grid fade-in">
+            <div class="menu-card" onclick="goToList('Bukhari')"><div class="menu-icon">📘</div><div class="menu-title">Al-Bukhari</div></div>
+            <div class="menu-card" onclick="goToList('Muslim')"><div class="menu-icon">📗</div><div class="menu-title">Muslim</div></div>
+            <div class="menu-card" onclick="goToList('Tirmidhi')"><div class="menu-icon">📙</div><div class="menu-title">At-Tirmidhi</div></div>
+            <div class="menu-card" onclick="goToList('Autre')"><div class="menu-icon">📚</div><div class="menu-title">Autres</div></div>
+            <div class="menu-card" onclick="goToList('Tous')"><div class="menu-icon">✦</div><div class="menu-title">Tout voir</div></div>
+        </div>
+    </div>
+
+    <div id="screen-list" class="screen">
+        <div class="top-bar">
+            <button class="btn-back" onclick="goToMenu()">✕ Retour</button>
+            <div class="list-title" id="list-title">Liste</div>
+            <div style="width: 50px;"></div>
+        </div>
+        <div class="search-area">
+            <input type="text" id="searchInput" placeholder="Rechercher...">
+            <select id="topicFilter">
+                <option value="Tous">Tous les sujets</option>
+                <option value="Intention">Intention</option>
+                <option value="Comportement">Comportement</option>
+                <option value="Famille">Famille</option>
+                <option value="Prière">Prière</option>
+                <option value="Charité">Charité</option>
+                <option value="Savoir">Savoir</option>
+                <option value="Santé">Santé</option>
+            </select>
+        </div>
+        <div id="hadithListContainer" class="hadith-container fade-in"></div>
+        <div id="pagination-controls" style="text-align: center; padding: 20px 0 50px;"></div>
+    </div>
+
+    <div id="screen-quiz" class="screen">
+        <div class="top-bar">
+            <button class="btn-back" onclick="showScreen('screen-dashboard')">✕ Quitter</button>
+            <div class="list-title">Quiz Islamique</div>
+            <div style="width: 50px;"></div>
+        </div>
+        <div class="hadith-container fade-in">
+            <div id="quiz-content">
+                <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 30px; overflow: hidden;">
+                    <div id="progress-fill" style="height: 100%; background: var(--primary); width: 0%; transition: width 0.3s;"></div>
+                </div>
+                <h3 id="question-text">Chargement...</h3>
+                <div id="options-container"></div>
+            </div>
+            <div id="quiz-result" style="display: none; text-align: center;">
+                <div class="score-circle"><span id="score-number"></span></div>
+                <h3>Quiz Terminé !</h3>
+                <p id="score-message">Bravo !</p>
+                <button class="btn-enter" onclick="startQuiz()">REJOUER</button>
+                <br><br>
+                <button class="btn-back" onclick="showScreen('screen-dashboard')">Retour Accueil</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. LES DONNÉES (HADITHS) ---
+        let hadiths = [
+            // Pack Essentiel pour commencer (tu pourras recoller ta grande liste ici)
+            { sujet: "Intention", texte: "Les actes ne valent que par les intentions.", source: "Bukhari & Muslim" },
+            { sujet: "Famille", texte: "Le paradis se trouve sous les pieds des mères.", source: "An-Nasa'i" },
+            { sujet: "Comportement", texte: "Le fort est celui qui se maîtrise lors de la colère.", source: "Bukhari" },
+            { sujet: "Sourire", texte: "Sourire à ton frère est une aumône.", source: "At-Tirmidhi" },
+            { sujet: "Savoir", texte: "Celui qui cherche le savoir, Allah lui facilite un chemin vers le Paradis.", source: "Muslim" },
+            { sujet: "Patience", texte: "La patience est une lumière.", source: "Muslim" },
+            { sujet: "Prière", texte: "La clé du Paradis est la prière.", source: "At-Tirmidhi" }
+        ];
+
+        // --- 2. LES QUESTIONS (QUIZ) ---
+        const quizData = [
+            { question: "Combien y a-t-il de piliers en Islam ?", options: ["3", "5", "6", "99"], correct: 1 },
+            { question: "Quelle sourate équivaut à un tiers du Coran ?", options: ["Al-Fatiha", "Al-Ikhlas", "Al-Falaq", "An-Nas"], correct: 1 },
+            { question: "Quelle prière marque le milieu de la journée ?", options: ["Fajr", "Dohr", "Asr", "Maghrib"], correct: 1 },
+            { question: "Quel prophète a fendu la mer ?", options: ["Moussa", "Ibrahim", "Nouh", "Issa"], correct: 0 },
+            { question: "Que signifie le mot Islam ?", options: ["Guerre", "Soumission", "Liberté", "Sagesse"], correct: 1 }
+        ];
+
+        // --- 3. MOTEUR ---
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        let currentSourceFilter = "Tous";
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.classList.remove('fade-in'); });
+            const screen = document.getElementById(screenId);
+            screen.classList.add('active');
+            void screen.offsetWidth; screen.classList.add('fade-in');
+        }
+
+        function goToMenu() { showScreen('screen-menu'); }
+        function goToList(sourceKey) {
+            currentSourceFilter = sourceKey;
+            const title = document.getElementById('list-title');
+            if(sourceKey==='Tous') title.innerText="Tout"; else if(sourceKey==='Autre') title.innerText="Divers"; else title.innerText=sourceKey;
+            document.getElementById('searchInput').value = "";
+            currentPage = 1;
+            showScreen('screen-list');
+            filterHadiths();
+        }
+
+        function displayHadiths(items) {
+            const container = document.getElementById('hadithListContainer');
+            container.innerHTML = "";
+            
+            const totalPages = Math.ceil(items.length / itemsPerPage);
+            if(currentPage < 1) currentPage = 1;
+            if(currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+            
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedItems = items.slice(start, end);
+
+            paginatedItems.forEach(h => {
+                const card = document.createElement('div'); card.className = 'hadith-card';
+                card.innerHTML = `<span class="tag">${h.sujet}</span><div class="hadith-text">« ${h.texte} »</div><div class="hadith-source">— ${h.source}</div>`;
+                container.appendChild(card);
+            });
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination-controls');
+            container.innerHTML = "";
+            if (totalPages <= 1) return;
+
+            const prevBtn = document.createElement('button'); prevBtn.className = 'btn-back'; prevBtn.style.fontSize='0.9rem'; prevBtn.innerText = "← Précédent";
+            prevBtn.onclick = () => { if(currentPage > 1) { currentPage--; filterHadiths(); document.getElementById('screen-list').scrollTop = 0; }};
+            
+            const nextBtn = document.createElement('button'); nextBtn.className = 'btn-back'; nextBtn.style.fontSize='0.9rem'; nextBtn.innerText = "Suivant →";
+            nextBtn.onclick = () => { if(currentPage < totalPages) { currentPage++; filterHadiths(); document.getElementById('screen-list').scrollTop = 0; }};
+
+            const info = document.createElement('span'); info.innerText = currentPage + " / " + totalPages; info.style.color="white"; info.style.margin="0 15px";
+
+            container.appendChild(prevBtn); container.appendChild(info); container.appendChild(nextBtn);
+        }
+
+        function filterHadiths() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const topic = document.getElementById('topicFilter').value;
+            const filtered = hadiths.filter(h => {
+                let srcMatch = true;
+                if(currentSourceFilter !== "Tous") {
+                    if(currentSourceFilter==="Autre") srcMatch = !h.source.includes("Bukhari") && !h.source.includes("Muslim") && !h.source.includes("Tirmidhi");
+                    else srcMatch = h.source.includes(currentSourceFilter);
+                }
+                const topicMatch = topic === "Tous" || h.sujet === topic;
+                const searchMatch = h.texte.toLowerCase().includes(term) || h.source.toLowerCase().includes(term);
+                return srcMatch && topicMatch && searchMatch;
+            });
+            displayHadiths(filtered);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; filterHadiths(); });
+        document.getElementById('topicFilter').addEventListener('change', () => { currentPage = 1; filterHadiths(); });
+
+        // QUIZ
+        let currentQuizQ = [];
+        let qIndex = 0; let score = 0; let isAnswering = false;
+
+        window.startQuiz = function() {
+            qIndex = 0; score = 0;
+            // ICI LE RÉGLAGE DU NOMBRE DE QUESTIONS (ex: 5)
+            let shuffled = [...quizData].sort(()=>0.5 - Math.random());
+            currentQuizQ = shuffled.slice(0, 5); 
+            
+            showScreen('screen-quiz');
+            document.getElementById('quiz-content').style.display = 'block';
+            document.getElementById('quiz-result').style.display = 'none';
+            loadQ();
+        };
+
+        function loadQ() {
+            isAnswering = false;
+            const q = currentQuizQ[qIndex];
+            const progress = ((qIndex) / currentQuizQ.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + "%";
+            document.getElementById('question-text').innerText = q.question;
+            const div = document.getElementById('options-container'); div.innerHTML="";
+            q.options.forEach((opt,i) => {
+                const btn = document.createElement('button'); btn.className='option-btn'; btn.innerText=opt;
+                btn.onclick = () => check(i, btn);
+                div.appendChild(btn);
+            });
+        }
+
+        function check(i, btn) {
+            if(isAnswering) return
         /* ================================================= */
         /* 1. VA SUR CODEPEN DANS LA CASE [CSS]              */
         /* COPIE TOUT LE CSS ET COLLE-LE JUSTE EN DESSOUS 👇 */
